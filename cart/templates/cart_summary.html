@@ -1,14 +1,79 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        <!-- Header-->
+<!-- Header-->
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Your Cart</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Review your items before Proceeding to Checkout</p>
+                    <h1 class="display-4 fw-bolder">Cart </h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Please Check your Products in the cart before Checking out</p>
                 </div>
             </div>
         </header>
+        <br><br>
+
+        <div class="container">
+            
+            {% for products in cart_products %}
+            
+            <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+              <img src="{{ product.image.url}}" class="img-fluid rounded-start" alt="...">
+            </div>
+              <div class="col-md-8">
+            <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}
+            <br>
+            {% if product.is_sale %}<div class="d-flex justify-content-center small text-warning mb-2">
+                                    &nbsp;&nbsp;SALE!!!&nbsp;&nbsp;
+                                    <div class="bi-star-fill" ></div>
+                                    </div>
+
+                                    <!-- Product price-->
+                                    <strike>
+                                        ${{ product.price }}
+                                    </strike>
+                                    &nbsp;
+                                    ${{ product.sale_price }}
+
+            {% else %}
+            ${{ product.price }}
+            {% endif %}
+        </p>
+        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+        <br><br>
+<br><br>
+<br><br>
+<br><br>
+        <button type="button" value="{{ product.id }}" class = "btn btn-secondary" id="add-cart">Add to Cart</button>
+        <a href="{% url 'home' %}" class="btn btn-primary">Back</a>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+</div>
+
+
+            {% endfor %}
+        </div>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+            
+                
+            </div>
+        </div>
         
 {% endblock %}
