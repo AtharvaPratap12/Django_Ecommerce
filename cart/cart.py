@@ -12,14 +12,16 @@ class Cart:
 
         self.cart = cart
 
-    def add(self, product):
+    def add(self, product, quantity):
         product_id = str(product.id)
+        product_qty = str(quantity)
 
         # Logic
         if product_id in self.cart:
             pass
         else:
-            self.cart[product_id] = {'price': str(product.price)}
+            #self.cart[product_id] = {'price': str(product.price)}
+            self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
 
@@ -33,3 +35,7 @@ class Cart:
         product = Product.objects.filter(id__in = product_ids)
         # Reurn those lookup products
         return product
+
+    def get_quants(self):
+        quantities = self.cart
+        return quantities

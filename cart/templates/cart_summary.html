@@ -14,7 +14,7 @@
 
         <div class="container">
             
-            {% for products in cart_products %}
+            {% for product in cart_products %}
             
             <div class="card mb-3">
             <div class="row g-0">
@@ -44,10 +44,27 @@
         </p>
         <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
         <br><br>
-<br><br>
-<br><br>
-<br><br>
-        <button type="button" value="{{ product.id }}" class = "btn btn-secondary" id="add-cart">Add to Cart</button>
+        <br><br>
+        <div class="row align:left">
+          <div class="col-md-2 " >Quantity:</div>
+            <div class="col-md-2 " >
+        <select class="form-select from-select-sm" id="qty-cart" >
+          {% for key, value in quantities.items %}
+          {% if key == product.id|slugify %}
+          <option selected>{{value}}</option selected>
+          {% endif %}
+          {% endfor %}
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+            </div>
+      </div>
+        <br><br>
+        <br><br>
+        
         <a href="{% url 'home' %}" class="btn btn-primary">Back</a>
 
 
