@@ -25,6 +25,29 @@ class Cart:
 
         self.session.modified = True
 
+    def cart_total(self):
+        # GET PRODUCT ID
+        product_ids = self.cart.keys()
+        # LOKK FOR THOSE KEY IN THE DICTIONARY/CART
+        products = Product.objects.filter(id__in = product_ids)
+        # Get Quantities
+        quantities = self.cart
+        # Start counting from 0 
+        total = 0
+        for key , value in quantities.items():
+            # Convert the string into the int
+            key = int(key)
+            for product  in products:
+                if product.id == key:
+                    if product.is_sale:
+                        total = total + (product.sale_price * value)
+                    else:
+                        total = total + (product.price * value)
+        return total
+
+
+
+
     def __len__(self):
         return len(self.cart)
 
@@ -53,3 +76,11 @@ class Cart:
 
         thing = self.cart
         return thing
+
+    def delete(self, product):
+        product_id = str(product)
+        #Delete from dictionary/Cart
+        if product_id  in self.cart:
+            del self.cart[product_id]
+
+        self.session.modified = True

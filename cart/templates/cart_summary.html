@@ -67,6 +67,7 @@
         
         <a href="{% url 'home' %}" class="btn btn-primary">Back</a>
         <button type="button" data-index = "{{product.id}}" class="btn btn-secondary update-cart" >Update</button>
+        <button type="button" data-index = "{{product.id}}" class="btn btn-danger delete-product" >Remove</button>
 
 
       </div>
@@ -75,16 +76,14 @@
 </div>
 <br><br>
 <br><br>
-<br><br>
-<br><br>
-
 </div>
 
 
             {% endfor %}
+            <h3>Total: ${{ totals }} </h3>
+
         </div>
-<br><br>
-<br><br>
+
 <br><br>
 <br><br>
 <br><br>
@@ -127,6 +126,41 @@ $(document).on('click', '.update-cart', function(e){
 
 
 });
+
+$(document).on('click', '.delete-product', function(e){
+    e.preventDefault();
+  /// Grab the productid
+  ///  var productid = $(this).data('index');
+    
+    $.ajax({
+      type: 'POST' ,
+      url: '{% url "cart_delete" %}',
+      data: {
+        product_id: $(this).data('index'),
+        ///product_qty: $('#select' + productid + ' option:selected').text(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      }, 
+
+      success: function(json){
+        //console.log(json)
+        //console.log("AJAX Sucess");
+        //document.getElementById("cart_quantity").textContent = json.qty
+        location.reload();
+      }, 
+
+      error: function(xhr, errmsg, err){
+
+      }
+
+      
+
+    });
+
+
+});
+
+
 
 </script>
 
