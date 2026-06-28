@@ -3,11 +3,52 @@ from django.contrib import messages
 from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 from django import forms
 
 # Create your views here.
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        # If they filled out the Form
+        if request.method == 'POST':
+            form = ChangePasswordForm(current_user, request.POST)
+            # Is the Form Valid
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Youu have successfully changed the password u have to login again")
+                return redirect('login')
+            else:
+                for error in list (form.errors.values()):
+                    messages.error(request, error)
+                    return redirect('update_password')
+
+        else:
+            form = ChangePasswordForm(current_user)
+            return render(request, 'update_password.html',{'form': form})
+
+    else:
+        messages.success(request, 'You must be logged in to see that page ')
+        return redirect('home')
+
+def update_user(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id = request.user.id)
+        user_form = UpdateUserForm(request.POST or None, instance = current_user )
+
+        if user_form.is_valid():
+            user_form.save()
+
+            login(request, current_user)
+            messages.success(request, "The User has been been Updated!!!!!!!")
+            return redirect('home')
+        return render(request, 'update_user.html', {'user_form': user_form})
+    else:
+
+            messages.error(request, 'You must be logged in to access the page')
+            return redirect('home')
+
 def category_summary(request):
     categories = Category.objects.all()
     return render(request, 'category_summary.html', { 'categories': categories })
